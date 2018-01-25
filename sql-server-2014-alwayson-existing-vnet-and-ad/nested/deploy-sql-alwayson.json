@@ -59,12 +59,12 @@
     "sqlAOPrepareConfigurationFunction": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
     "createClusterModulesURL": "[concat(parameters('_artifactsLocation'),'/dsc/create-failover-cluster.ps1.zip',parameters('_artifactsLocationSasToken'))]",
     "createClusterConfigurationFunction": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
-    "clusterName": "[concat(parameters('namePrefix'),'-c')]"
+    "clusterName": "[concat(parameters('namePrefix'),'')]"
   },
   "resources": [
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('sqlNamePrefix'),'0/sqlAOPrepare')]",
+      "name": "[concat(parameters('sqlNamePrefix'),'1/sqlAOPrepare')]",
       "apiVersion": "2015-06-15",
       "location": "[resourceGroup().location]",
       "dependsOn": [],
@@ -104,7 +104,7 @@
       "apiVersion": "2015-06-15",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlNamePrefix'),'0/extensions/sqlAOPrepare')]"
+        "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlNamePrefix'),'1/extensions/sqlAOPrepare')]"
       ],
       "properties": {
         "publisher": "Microsoft.Powershell",
@@ -120,17 +120,17 @@
             "clusterName": "[variables('clusterName')]",
             "sharePath": "[concat('\\\\',parameters('sqlWitnessVMName'),'\\',parameters('sharePath'))]",
             "nodes": [
-              "[concat(parameters('sqlNamePrefix'),'0')]",
-              "[concat(parameters('sqlNamePrefix'),'1')]"
+              "[concat(parameters('sqlNamePrefix'),'01')]",
+              "[concat(parameters('sqlNamePrefix'),'02')]"
             ],
             "sqlAlwaysOnEndpointName": "[parameters('sqlAlwaysOnEndpointName')]",
             "sqlAlwaysOnAvailabilityGroupName": "[parameters('sqlAlwaysOnAvailabilityGroupName1')]",
             "sqlAlwaysOnAvailabilityGroupListenerName": "[parameters('sqlAlwaysOnAvailabilityGroupListenerName1')]",
-            "sqlAlwaysOnAvailabilityGroupListenerPort": 1433,
+            "sqlAlwaysOnAvailabilityGroupListenerPort": 1134,
             "lbName": "[parameters('sqlLBName')]",
             "lbAddress": "[parameters('sqlLBIPAddress')]",
-            "primaryReplica": "[concat(parameters('sqlNamePrefix'),'1')]",
-            "secondaryReplica": "[concat(parameters('sqlNamePrefix'),'0')]",
+            "primaryReplica": "[concat(parameters('sqlNamePrefix'),'2')]",
+            "secondaryReplica": "[concat(parameters('sqlNamePrefix'),'1')]",
             "dnsServerName": "[parameters('dnsServerName')]",
             "adminCreds": {
               "userName": "[parameters('adminUsername')]",
